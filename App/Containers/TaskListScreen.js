@@ -1,6 +1,8 @@
+// @flow
 import React, {Component} from 'react';
 import {Text} from 'react-native';
 import {connect} from 'react-redux';
+import * as Models from '../Models';
 
 import {Screen} from '../Themes/ApplicationStyles'
 import TasksActions, {getTaskList} from "../Redux/TasksRedux";
@@ -8,10 +10,14 @@ import TasksActions, {getTaskList} from "../Redux/TasksRedux";
 
 class TaskListScreen extends Component {
 
+  props: {
+    tasks: Models.Task[]
+  }
+
   render() {
     return (
       <Screen>
-        <Text>Task List</Text>
+
       </Screen>
     );
   }
