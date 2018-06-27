@@ -14,28 +14,9 @@ class RootContainer extends Component {
     }
   }
 
-// gets the current screen from navigation state
-  getActiveRouteName(navigationState) {
-    if (!navigationState) {
-      return null;
-    }
-    const route = navigationState.routes[navigationState.index];
-    // dive into nested navigators
-    if (route.routes) {
-      return this.getActiveRouteName(route);
-    }
-    return route.routeName;
-  }
-
   render() {
     return (
-      <AppNavigation onNavigationStateChange={(prevState, currentState) => {
-        const currentScreen = this.getActiveRouteName(currentState);
-        const prevScreen = this.getActiveRouteName(prevState);
-
-        if (prevScreen !== currentScreen) {
-        }
-      }}/>
+      <AppNavigation/>
     );
   }
 }
