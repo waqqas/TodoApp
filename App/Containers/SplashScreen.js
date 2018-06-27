@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
+import {Text} from 'react-native';
 import {connect} from 'react-redux';
+import {StackActions, NavigationActions} from 'react-navigation';
 
 import {getStartupStatus} from '../Redux/StartupRedux';
 import {Screen, AppStatusBar} from '../Themes/ApplicationStyles'
@@ -7,15 +9,14 @@ import {Screen, AppStatusBar} from '../Themes/ApplicationStyles'
 
 class SplashScreen extends Component {
 
-  componentDidMount() {
-    if (this.props.startupSuccess === true) {
-      //TODO: navigate to main screen
-    }
-  }
-
   componentWillReceiveProps(nextProps) {
     if (nextProps.startupSuccess === true) {
-      //TODO: navigate to main screen
+      const resetAction = StackActions.reset({
+        index: 0,
+        actions: [NavigationActions.navigate({routeName: 'TaskListScreen'})],
+      });
+      this.props.navigation.dispatch(resetAction);
+
     }
   }
 
@@ -23,6 +24,7 @@ class SplashScreen extends Component {
     return (
       <Screen>
         <AppStatusBar hidden/>
+        <Text>Splash</Text>
       </Screen>
     );
   }
