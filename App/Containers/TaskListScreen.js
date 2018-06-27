@@ -1,23 +1,50 @@
 // @flow
 import React, {Component} from 'react';
-import {Text} from 'react-native';
+import {Text, FlatList, View} from 'react-native';
 import {connect} from 'react-redux';
-import * as Models from '../Models';
 
 import {Screen} from '../Themes/ApplicationStyles'
 import TasksActions, {getTaskList} from "../Redux/TasksRedux";
+import type {Task} from "../Models";
 
+type Props = {
+  tasks: Task[],
+  addTask: (Task) => void
+}
 
-class TaskListScreen extends Component {
+class TaskListScreen extends Component<Props> {
 
-  props: {
-    tasks: Models.Task[]
+  props: Props
+
+  // componentDidMount() {
+  //   this.props.addTask({id: '1', title: 'task1', done: false})
+  // }
+
+  renderTask(item) {
+    const task: Task = item.item
+
+    return (
+      <View>
+        <Text>{task.id}</Text>
+        <Text>{task.title}</Text>
+      </View>
+    )
+  }
+
+  renderEmptyPlaceHolder() {
+    return (
+      <Text>No tasks found</Text>
+    )
   }
 
   render() {
     return (
       <Screen>
-
+        <FlatList
+          data={this.props.tasks}
+          renderItem={this.renderTask}
+          ListEmptyComponent={this.renderEmptyPlaceHolder()}
+          keyExtractor={item => item.id}/>
       </Screen>
     );
   }
