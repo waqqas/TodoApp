@@ -14,11 +14,6 @@ class RootContainer extends Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.startupSuccess !== this.props.startupSuccess) {
-    }
-  }
-
 // gets the current screen from navigation state
   getActiveRouteName(navigationState) {
     if (!navigationState) {
@@ -46,9 +41,7 @@ class RootContainer extends Component {
 }
 
 const mapStateToProps = (state) => {
-  return {
-    startupSuccess: state.startup.success,
-  };
+  return {}
 };
 
 const mapDispatchToProps = (dispatch) => ({
