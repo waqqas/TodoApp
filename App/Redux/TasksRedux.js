@@ -19,7 +19,7 @@ export const INITIAL_STATE = Immutable({
 
 /* ------------- Reducers ------------- */
 
-export const addTask = (state, {task}) => state.merge({list: update(state.list, {$push: task})})
+export const addTask = (state, {task}) => state.merge({list: update(state.list, {$push: [task]})})
 
 /* ------------- Hookup Reducers To Types ------------- */
 
