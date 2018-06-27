@@ -9,6 +9,16 @@ import {Screen, AppStatusBar} from '../Themes/ApplicationStyles'
 
 class SplashScreen extends Component {
 
+  componentDidMount() {
+    if (this.props.startupSuccess === true) {
+      const resetAction = StackActions.reset({
+        index: 0,
+        actions: [NavigationActions.navigate({routeName: 'TaskListScreen'})],
+      });
+      this.props.navigation.dispatch(resetAction);
+    }
+  }
+
   componentWillReceiveProps(nextProps) {
     if (nextProps.startupSuccess === true) {
       const resetAction = StackActions.reset({
