@@ -5,7 +5,7 @@ import StartupActions from '../Redux/StartupRedux'
 
 const updateReducers = (store) => {
   const reducerVersion = ReduxPersist.reducerVersion
-  const startup = () => store.dispatch(StartupActions.startup())
+  const startup = () => store.dispatch(StartupActions.startupSuccess())
 
   // Check to ensure latest reducer version
   AsyncStorage.getItem('reducerVersion').then((localVersion) => {

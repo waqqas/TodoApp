@@ -10,7 +10,7 @@ class RootContainer extends Component {
   componentDidMount() {
     // if redux persist is not active fire startup action
     if (!ReduxPersist.active) {
-      this.props.startup();
+      this.props.startupSuccess();
     }
   }
 
@@ -26,7 +26,7 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  startup: () => dispatch(StartupActions.startup()),
+  startupSuccess: () => dispatch(StartupActions.startupSuccess()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(RootContainer);

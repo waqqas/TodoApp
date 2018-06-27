@@ -1,3 +1,3 @@
 export default {
-  yellowBox: false
+  yellowBox: true
 }
