@@ -6,6 +6,7 @@ import ReduxPersist from '../Config/ReduxPersist'
 /* ------------- Assemble The Reducers ------------- */
 const reducers = combineReducers({
   startup: require('./StartupRedux').reducer,
+  tasks: require('./TasksRedux').reducer,
 })
 
 export default () => {
