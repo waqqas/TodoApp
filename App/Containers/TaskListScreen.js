@@ -6,6 +6,7 @@ import {connect} from 'react-redux';
 import {Screen} from '../Themes/ApplicationStyles'
 import TasksActions, {getTaskList} from "../Redux/TasksRedux";
 import type {Task} from "../Models";
+import TaskRow from '../Components/TaskRow'
 
 type Props = {
   tasks: Task[],
@@ -16,18 +17,21 @@ class TaskListScreen extends Component<Props> {
 
   props: Props
 
-  // componentDidMount() {
-  //   this.props.addTask({id: '1', title: 'task1', done: false})
-  // }
+  componentDidMount() {
+    setTimeout(() => {
+      this.props.addTask({id: '1', title: 'task1', done: false})
+    }, 1000)
+  }
 
-  renderTask(item) {
+  onPressRow(task: Task) {
+    alert('task:' + task.id)
+  }
+
+  renderTask = (item) => {
     const task: Task = item.item
 
     return (
-      <View>
-        <Text>{task.id}</Text>
-        <Text>{task.title}</Text>
-      </View>
+      <TaskRow task={task} onPressRow={this.onPressRow.bind(this, task)}/>
     )
   }
 
