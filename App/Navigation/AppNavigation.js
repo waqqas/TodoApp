@@ -3,9 +3,11 @@ import {createStackNavigator} from 'react-navigation';
 
 import SplashScreen from '../Containers/SplashScreen';
 import TaskListScreen from '../Containers/TaskListScreen';
+import AddTaskScreen from '../Containers/AddTaskScreen';
 
 const MainNav = createStackNavigator({
   TaskListScreen: {screen: TaskListScreen},
+  AddTaskScreen: {screen: AddTaskScreen},
 }, {
   initialRouteName: 'TaskListScreen',
 });

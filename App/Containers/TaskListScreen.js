@@ -4,13 +4,13 @@ import {Text, FlatList, View} from 'react-native';
 import {connect} from 'react-redux';
 
 import {Screen, IconButton} from '../Themes/ApplicationStyles'
-import TasksActions, {getTaskList} from "../Redux/TasksRedux";
-import type {Task} from "../Models";
+import {getTaskList} from "../Redux/TasksRedux";
+import type {Task, Navigator} from "../Models";
 import TaskRow from '../Components/TaskRow'
 
 type Props = {
   tasks: Task[],
-  addTask: (Task) => void
+  navigation: Navigator,
 }
 
 class TaskListScreen extends Component<Props> {
@@ -18,10 +18,11 @@ class TaskListScreen extends Component<Props> {
   props: Props
 
   static navigationOptions = ({navigation}) => {
-    const onPressAddTask = navigation.getParam('onPressAddTask', () => {})
+    const onPressAddTask = navigation.getParam('onPressAddTask', () => {
+    })
     return ({
       title: 'Tasks',
-      headerRight: <IconButton name='plus' onPress={onPressAddTask} />
+      headerRight: <IconButton name='plus' onPress={onPressAddTask}/>
     })
   }
 
@@ -31,7 +32,7 @@ class TaskListScreen extends Component<Props> {
   }
 
   onPressAddTask = () => {
-    alert('onPressAddTask')
+    this.props.navigation.navigate('AddTaskScreen')
   }
 
   onPressRow(task: Task) {
@@ -70,7 +71,7 @@ const mapStateToProps = (state) => {
     tasks: getTaskList(state)
   };
 };
-const mapDispatchToProps = (dispatch) => ({
-  addTask: (task) => dispatch(TasksActions.addTask(task))
-});
+
+const mapDispatchToProps = (dispatch) => ({});
+
 export default connect(mapStateToProps, mapDispatchToProps)(TaskListScreen);
