@@ -36,7 +36,7 @@ class TaskListScreen extends Component<Props> {
   }
 
   onPressRow(task: Task) {
-    alert('task:' + task.id)
+    this.props.navigation.navigate('AddTaskScreen', {task})
   }
 
   renderTask = (item) => {

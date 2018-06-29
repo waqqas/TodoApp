@@ -11,11 +11,13 @@ import type {Task, Navigator} from "../Models";
 
 type Props = {
   addTask: (Task) => void,
+  updateTask: (Task) => void,
   navigation: Navigator
 }
 
 type State = {
   newTask: Task;
+  mode: 'add' | 'update'
 }
 
 class AddTaskScreen extends Component<Props, State> {
@@ -27,7 +29,8 @@ class AddTaskScreen extends Component<Props, State> {
       id: uuid(),
       title: '',
       done: false
-    }
+    },
+    mode: 'add'
   }
 
   static navigationOptions = ({navigation}) => {
@@ -42,10 +45,22 @@ class AddTaskScreen extends Component<Props, State> {
 
   componentDidMount() {
     this.props.navigation.setParams({onPressSave: this.onPressSave})
+
+    // edit a
+    const task = this.props.navigation.getParam('task')
+    if (task) {
+      this.setState({mode: 'update', newTask: task})
+    }
   }
 
   onPressSave = () => {
-    this.props.addTask(this.state.newTask)
+    if(this.state.mode === 'add'){
+      this.props.addTask(this.state.newTask)
+    }
+    else{
+      this.props.updateTask(this.state.newTask)
+    }
+
     this.props.navigation.goBack()
   }
 
@@ -72,7 +87,8 @@ const mapStateToProps = (state) => {
   return {};
 };
 const mapDispatchToProps = (dispatch) => ({
-  addTask: (task) => dispatch(TasksActions.addTask(task))
+  addTask: (task) => dispatch(TasksActions.addTask(task)),
+  updateTask: (task) => dispatch(TasksActions.updateTask(task)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddTaskScreen);
