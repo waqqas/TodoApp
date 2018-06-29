@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 import {Text, FlatList, View} from 'react-native';
 import {connect} from 'react-redux';
 
-import {Screen} from '../Themes/ApplicationStyles'
+import {Screen, IconButton} from '../Themes/ApplicationStyles'
 import TasksActions, {getTaskList} from "../Redux/TasksRedux";
 import type {Task} from "../Models";
 import TaskRow from '../Components/TaskRow'
@@ -16,6 +16,14 @@ type Props = {
 class TaskListScreen extends Component<Props> {
 
   props: Props
+
+  static navigationOptions = () => {
+    return ({
+      title: 'Tasks',
+      headerRight: <IconButton name='plus' onPress={() => {}} />
+    })
+  }
+
 
   componentDidMount() {
     setTimeout(() => {
