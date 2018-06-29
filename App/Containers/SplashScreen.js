@@ -13,7 +13,7 @@ class SplashScreen extends Component {
     if (this.props.startupSuccess === true) {
       const resetAction = StackActions.reset({
         index: 0,
-        actions: [NavigationActions.navigate({routeName: 'TaskListScreen'})],
+        actions: [NavigationActions.navigate({routeName: 'MainNav'})],
       });
       this.props.navigation.dispatch(resetAction);
     }
@@ -23,7 +23,7 @@ class SplashScreen extends Component {
     if (nextProps.startupSuccess === true) {
       const resetAction = StackActions.reset({
         index: 0,
-        actions: [NavigationActions.navigate({routeName: 'TaskListScreen'})],
+        actions: [NavigationActions.navigate({routeName: 'MainNav'})],
       });
       this.props.navigation.dispatch(resetAction);
 
