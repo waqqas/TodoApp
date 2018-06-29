@@ -1,6 +1,7 @@
 // @flow
 import React, {Component} from 'react'
 import {View, Text, TouchableOpacity} from 'react-native'
+import {ListItem} from 'react-native-elements'
 
 import type {Task} from "../Models";
 
@@ -15,10 +16,7 @@ export default class TaskRow extends Component<Props> {
   render() {
     const {task, onPressRow} = this.props
 
-    return (<TouchableOpacity onPress={onPressRow}>
-      <Text>{task.id}</Text>
-      <Text>{task.title}</Text>
-    </TouchableOpacity>)
+    return (<ListItem title={task.title} rightIcon={task.done? {type: 'font-awesome', name:'check'}: {type: 'font-awesome', name:'times'} } onPress={onPressRow}/>)
 
   }
 
