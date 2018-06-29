@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 import {Text, FlatList, View} from 'react-native';
 import {connect} from 'react-redux';
 
-import {Screen, IconButton} from '../Themes/ApplicationStyles'
+import {Screen, IconButton, Content} from '../Themes/ApplicationStyles'
 import {getTaskList} from "../Redux/TasksRedux";
 import type {Task, Navigator} from "../Models";
 import TaskRow from '../Components/TaskRow'
@@ -56,11 +56,13 @@ class TaskListScreen extends Component<Props> {
   render() {
     return (
       <Screen>
+        <Content padding={20}>
         <FlatList
           data={this.props.tasks}
           renderItem={this.renderTask}
           ListEmptyComponent={this.renderEmptyPlaceHolder()}
           keyExtractor={item => item.id}/>
+        </Content>
       </Screen>
     );
   }
