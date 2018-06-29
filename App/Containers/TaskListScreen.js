@@ -17,18 +17,21 @@ class TaskListScreen extends Component<Props> {
 
   props: Props
 
-  static navigationOptions = () => {
+  static navigationOptions = ({navigation}) => {
+    const onPressAddTask = navigation.getParam('onPressAddTask', () => {})
     return ({
       title: 'Tasks',
-      headerRight: <IconButton name='plus' onPress={() => {}} />
+      headerRight: <IconButton name='plus' onPress={onPressAddTask} />
     })
   }
 
 
   componentDidMount() {
-    setTimeout(() => {
-      this.props.addTask({id: '1', title: 'task1', done: false})
-    }, 1000)
+    this.props.navigation.setParams({onPressAddTask: this.onPressAddTask})
+  }
+
+  onPressAddTask = () => {
+    alert('onPressAddTask')
   }
 
   onPressRow(task: Task) {
