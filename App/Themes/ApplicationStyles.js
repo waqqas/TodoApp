@@ -11,8 +11,8 @@ flex: 1;`
 export const AppStatusBar = styled.StatusBar`
 `
 
-const AppIconButton = ({onPress, ...props}) => (
-  <TouchableOpacity onPress={onPress}>
+const AppIconButton = ({onPress,disabled, ...props}) => (
+  <TouchableOpacity onPress={!disabled && onPress}>
     <Icon size={20} {...props}></Icon>
   </TouchableOpacity>
 )
@@ -58,3 +58,12 @@ font-size: 15px;
 color: ${Colors.textInput};
 padding-vertical: 0px;
 `
+
+export const DoneSwitch = styled.Switch``
+
+
+export const FormValidationError = styled.Text`
+color: ${Colors.error};
+font-size 12px;
+`
+
