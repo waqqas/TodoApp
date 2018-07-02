@@ -15,4 +15,9 @@ export type Task = {
   done: boolean;
 }
 
+export type AddTaskFormValues = {
+  title: string;
+  done: boolean;
+}
+
 

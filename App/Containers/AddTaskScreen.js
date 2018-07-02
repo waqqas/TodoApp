@@ -2,81 +2,73 @@
 import React, {Component} from 'react';
 import {Text, View} from 'react-native';
 import {connect} from 'react-redux';
-import update from 'immutability-helper';
-import uuid from 'uuid/v4'
 
-import {Screen, IconButton, Content, TitleInput} from '../Themes/ApplicationStyles'
+import {isInvalid, isSubmitting, getFormValues} from 'redux-form'
+
+import {Screen, IconButton, Content} from '../Themes/ApplicationStyles'
 import TasksActions from "../Redux/TasksRedux";
-import type {Task, Navigator} from "../Models";
+import type {Task, Navigator, AddTaskFormValues} from "../Models";
+import AddTaskForm from '../Components/AddTaskForm'
 
 type Props = {
-  addTask: (Task) => void,
-  updateTask: (Task) => void,
-  navigation: Navigator
+  task: Task,
+  addTask: (AddTaskFormValues) => void,
+  updateTask: (AddTaskFormValues, string) => void,
+  navigation: Navigator,
+  invalid: boolean;
+  submitting: boolean;
+  pristine: boolean;
+  values: AddTaskFormValues;
 }
 
-type State = {
-  newTask: Task;
-  mode: 'add' | 'update'
-}
-
-class AddTaskScreen extends Component<Props, State> {
+class AddTaskScreen extends Component<Props> {
 
   props: Props
-
-  state: State = {
-    newTask: {
-      id: uuid(),
-      title: '',
-      done: false
-    },
-    mode: 'add'
-  }
 
   static navigationOptions = ({navigation}) => {
     const onPressSave = navigation.getParam('onPressSave', () => {
     })
+    const saveDisabled = navigation.getParam('saveDisabled', true)
+    const task = navigation.getParam('task')
+
     return ({
-      title: 'Add Task',
-      headerRight: <IconButton name='save' onPress={onPressSave}/>
+      title: task ? task.title : 'Add Task',
+      headerRight: <IconButton disabled={saveDisabled} name='save' onPress={onPressSave}/>
     })
   }
 
 
   componentDidMount() {
     this.props.navigation.setParams({onPressSave: this.onPressSave})
+  }
 
-    // edit a
-    const task = this.props.navigation.getParam('task')
-    if (task) {
-      this.setState({mode: 'update', newTask: task})
+  componentWillReceiveProps(nextProps: Props) {
+    const prevSaveDisabled = this.props.navigation.getParam('saveDisabled', true)
+    const saveDisabled = (nextProps.invalid || nextProps.submitting)
+    if (prevSaveDisabled !== saveDisabled) {
+      this.props.navigation.setParams({saveDisabled})
     }
   }
 
   onPressSave = () => {
-    if(this.state.mode === 'add'){
-      this.props.addTask(this.state.newTask)
+    const task = this.props.navigation.getParam('task')
+
+    if (task) {
+      this.props.updateTask(this.props.values, task.id)
     }
-    else{
-      this.props.updateTask(this.state.newTask)
+    else {
+      this.props.addTask(this.props.values)
     }
 
     this.props.navigation.goBack()
   }
 
-  onValueChange(field, value) {
-    const newTask = update(this.state.newTask, {[field]: {$set: value}})
-    this.setState({newTask})
-  }
-
-
   render() {
-    const {newTask} = this.state
-
+    const task = this.props.navigation.getParam('task')
     return (
       <Screen>
         <Content padding={20}>
-          <TitleInput value={newTask.title} onChangeText={this.onValueChange.bind(this, 'title')}/>
+          <AddTaskForm task={task}/>
         </Content>
       </Screen>
     );
@@ -84,11 +76,15 @@ class AddTaskScreen extends Component<Props, State> {
 }
 
 const mapStateToProps = (state) => {
-  return {};
+  return {
+    values: getFormValues('addTask')(state),
+    invalid: isInvalid('addTask')(state),
+    submitting: isSubmitting('addTas')(state),
+  };
 };
 const mapDispatchToProps = (dispatch) => ({
-  addTask: (task) => dispatch(TasksActions.addTask(task)),
-  updateTask: (task) => dispatch(TasksActions.updateTask(task)),
+  addTask: (form) => dispatch(TasksActions.addTask(form)),
+  updateTask: (form, id) => dispatch(TasksActions.updateTask(form, id)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddTaskScreen);

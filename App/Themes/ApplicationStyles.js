@@ -1,6 +1,17 @@
 import React from 'react'
 import styled from "styled-components/native/index";
-import {Image, View, StatusBar, Text, TextInput, TouchableOpacity, ScrollView, ActivityIndicator, Switch, Platform} from 'react-native'
+import {
+  Image,
+  View,
+  StatusBar,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  ScrollView,
+  ActivityIndicator,
+  Switch,
+  Platform
+} from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome'
 
 import {Colors} from '../Themes'
@@ -11,8 +22,8 @@ flex: 1;`
 export const AppStatusBar = styled.StatusBar`
 `
 
-const AppIconButton = ({onPress, ...props}) => (
-  <TouchableOpacity onPress={onPress}>
+const AppIconButton = ({onPress, disabled, ...props}) => (
+  <TouchableOpacity onPress={!disabled ? onPress : null}>
     <Icon size={20} {...props}></Icon>
   </TouchableOpacity>
 )
@@ -57,4 +68,12 @@ padding-left: 24px;
 font-size: 15px;
 color: ${Colors.textInput};
 padding-vertical: 0px;
+`
+
+export const DoneSwitch = styled.Switch``
+
+export const FormValidationError = styled.Text`
+color: ${Colors.error};
+font-size: 12px;
+margin-vertical: 10px;
 `
