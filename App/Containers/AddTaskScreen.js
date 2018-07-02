@@ -29,9 +29,10 @@ class AddTaskScreen extends Component<Props> {
     const onPressSave = navigation.getParam('onPressSave', () => {
     })
     const saveDisabled = navigation.getParam('saveDisabled', true)
+    const task = navigation.getParam('task')
 
     return ({
-      title: 'Add Task',
+      title: task ? task.title : 'Add Task',
       headerRight: <IconButton disabled={saveDisabled} name='save' onPress={onPressSave}/>
     })
   }
