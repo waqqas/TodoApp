@@ -1,7 +1,8 @@
 // @flow
 import React, {Component} from 'react'
 import {View, Text, TouchableOpacity} from 'react-native'
-import {ListItem} from 'react-native-elements'
+import Icon from 'react-native-vector-icons/FontAwesome'
+import {Colors} from '../Themes'
 
 import type {Task} from "../Models";
 
@@ -16,7 +17,10 @@ export default class TaskRow extends Component<Props> {
   render() {
     const {task, onPressRow} = this.props
 
-    return (<ListItem title={task.title} rightIcon={task.done? {type: 'font-awesome', name:'check'}: {type: 'font-awesome', name:'times'} } onPress={onPressRow}/>)
+    return(<TouchableOpacity onPress={onPressRow} style={{flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginVertical: 10}}>
+      <Text style={{fontSize: 15, color: Colors.textInput}}>{task.title}</Text>
+      <Icon name={task.done? 'check': 'times'} style={{fontSize: 20}}></Icon>
+    </TouchableOpacity>)
 
   }
 
