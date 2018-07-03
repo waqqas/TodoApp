@@ -2,15 +2,16 @@
 import React, {Component} from 'react';
 import {Text, FlatList, View} from 'react-native';
 import {connect} from 'react-redux';
+import type {NavigationScreenProp, NavigationState} from 'react-navigation'
 
 import {Screen, IconButton, Content} from '../Themes/ApplicationStyles'
 import TasksActions, {getTaskList} from "../Redux/TasksRedux";
-import type {Task, Navigator} from "../Models";
+import type {Task} from "../Models";
 import TaskRow from '../Components/TaskRow'
 
 type Props = {
   tasks: Task[],
-  navigation: Navigator,
+  navigation: NavigationScreenProp<NavigationState>,
   getTasks: (void) => void
 }
 

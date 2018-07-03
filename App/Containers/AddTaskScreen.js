@@ -2,12 +2,13 @@
 import React, {Component} from 'react';
 import {Text, View} from 'react-native';
 import {connect} from 'react-redux';
-
 import {isInvalid, isSubmitting, getFormValues} from 'redux-form'
+import type {NavigationScreenProp, NavigationState} from 'react-navigation'
+
 
 import {Screen, IconButton, Content, FullButton} from '../Themes/ApplicationStyles'
 import TasksActions from "../Redux/TasksRedux";
-import type {Task, Navigator, AddTaskFormValues} from "../Models";
+import type {Task, AddTaskFormValues} from "../Models";
 import AddTaskForm from '../Components/AddTaskForm'
 import {Colors} from '../Themes'
 
@@ -15,7 +16,7 @@ type Props = {
   addTask: (AddTaskFormValues) => void,
   updateTask: (AddTaskFormValues, string) => void,
   deleteTask: (Task) => void,
-  navigation: Navigator,
+  navigation: NavigationScreenProp<NavigationState>,
   invalid: boolean;
   submitting: boolean;
   values: AddTaskFormValues;
