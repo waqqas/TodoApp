@@ -24,6 +24,18 @@ const updateTask = function* (api, {form, id}) {
   }
 }
 
+const getTasks = function* (api) {
+  const response = yield call(api.getTasks)
+  console.log('response: ', response)
+  if (response.ok) {
+    yield put(TasksActions.getTasksSuccess(response.data))
+  }
+  else if (response.problem === 'TIMEOUT_ERROR') {
+  }
+  else {
+  }
+}
+
 
 export default () => {
   function* watcher(api) {
@@ -31,6 +43,7 @@ export default () => {
       yield all([
         takeLatest(TasksTypes.ADD_TASK, addTask, api),
         takeLatest(TasksTypes.UPDATE_TASK, updateTask, api),
+        takeLatest(TasksTypes.GET_TASKS, getTasks, api),
       ]);
 
     } finally {

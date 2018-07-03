@@ -5,12 +5,12 @@ import StartupActions, {StartupTypes} from '../Redux/StartupRedux'
 import AppActions from '../Redux/AppRedux'
 
 const startup = function* (api) {
+  yield put(AppActions.startApp())
   yield put(StartupActions.startupSuccess());
 };
 
 const startupSuccess = function* (api) {
   api.setHeader('authorization', `Bearer ${DeviceInfo.getUniqueID()}`)
-  yield put(AppActions.startApp())
 };
 
 export default () => {
