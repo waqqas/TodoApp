@@ -77,3 +77,26 @@ color: ${Colors.error};
 font-size: 12px;
 margin-vertical: 10px;
 `
+
+
+const ButtonText = styled.Text`
+font-size: 18px;
+color: ${props => props.color || '#FFFFFF'};
+text-align: center;
+`
+
+
+const Processing = styled.ActivityIndicator`
+`
+
+const AppButton = ({spinner, disabled, children, textProps, onPress, ...props}) => (
+  <TouchableOpacity onPress={!disabled ? onPress : null} {...props}>
+    {!spinner && <ButtonText {...textProps}>{children}</ButtonText>}
+    {spinner && <Processing color={props.backgroundColor || Colors.default} animating={spinner}/>}
+  </TouchableOpacity>
+)
+
+export const FullButton = styled(AppButton)`
+padding-vertical: 12px;
+background: ${props => props.backgroundColor || Colors.default}${props => props.disabled ? '3E' : 'FF'};
+`

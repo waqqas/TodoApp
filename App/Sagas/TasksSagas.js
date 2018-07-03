@@ -35,6 +35,17 @@ const getTasks = function* (api) {
   }
 }
 
+const deleteTask = function* (api, {task}) {
+  const response = yield call(api.deleteTask, task.id)
+  if (response.ok) {
+    yield put(TasksActions.deleteTaskSuccess(response.data))
+  }
+  else if (response.problem === 'TIMEOUT_ERROR') {
+  }
+  else {
+  }
+}
+
 
 export default () => {
   function* watcher(api) {
@@ -43,6 +54,7 @@ export default () => {
         takeLatest(TasksTypes.ADD_TASK, addTask, api),
         takeLatest(TasksTypes.UPDATE_TASK, updateTask, api),
         takeLatest(TasksTypes.GET_TASKS, getTasks, api),
+        takeLatest(TasksTypes.DELETE_TASK, deleteTask, api),
       ]);
 
     } finally {

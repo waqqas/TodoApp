@@ -5,19 +5,19 @@ import {connect} from 'react-redux';
 
 import {isInvalid, isSubmitting, getFormValues} from 'redux-form'
 
-import {Screen, IconButton, Content} from '../Themes/ApplicationStyles'
+import {Screen, IconButton, Content, FullButton} from '../Themes/ApplicationStyles'
 import TasksActions from "../Redux/TasksRedux";
 import type {Task, Navigator, AddTaskFormValues} from "../Models";
 import AddTaskForm from '../Components/AddTaskForm'
+import {Colors} from '../Themes'
 
 type Props = {
-  task: Task,
   addTask: (AddTaskFormValues) => void,
   updateTask: (AddTaskFormValues, string) => void,
+  deleteTask: (Task) => void,
   navigation: Navigator,
   invalid: boolean;
   submitting: boolean;
-  pristine: boolean;
   values: AddTaskFormValues;
 }
 
@@ -50,6 +50,12 @@ class AddTaskScreen extends Component<Props> {
     }
   }
 
+  onPressDeleteTask = () => {
+    const task = this.props.navigation.getParam('task')
+    this.props.deleteTask(task)
+    this.props.navigation.goBack()
+  }
+
   onPressSave = () => {
     const task = this.props.navigation.getParam('task')
 
@@ -70,6 +76,7 @@ class AddTaskScreen extends Component<Props> {
         <Content padding={20}>
           <AddTaskForm task={task}/>
         </Content>
+        {task && <FullButton backgroundColor={Colors.error} onPress={this.onPressDeleteTask}>DELETE</FullButton>}
       </Screen>
     );
   }
@@ -79,12 +86,13 @@ const mapStateToProps = (state) => {
   return {
     values: getFormValues('addTask')(state),
     invalid: isInvalid('addTask')(state),
-    submitting: isSubmitting('addTas')(state),
+    submitting: isSubmitting('addTask')(state),
   };
 };
 const mapDispatchToProps = (dispatch) => ({
   addTask: (form) => dispatch(TasksActions.addTask(form)),
   updateTask: (form, id) => dispatch(TasksActions.updateTask(form, id)),
+  deleteTask: (task) => dispatch(TasksActions.deleteTask(task)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddTaskScreen);
