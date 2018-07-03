@@ -17,6 +17,7 @@
     "react-native": "0.55.4",
     "react-native-device-info": "^0.21.5",
     "react-native-elements": "^0.19.1",
+    "react-native-statusbar-alert": "^0.4.0",
     "react-native-vector-icons": "^4.6.0",
     "react-navigation": "^2.5.3",
     "react-redux": "^5.0.7",

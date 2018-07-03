@@ -11,4 +11,8 @@ export type AddTaskFormValues = {
   done: boolean;
 }
 
+export type ConnectionInfo = {
+  type: string;
+  effectiveType: string;
+}
 
