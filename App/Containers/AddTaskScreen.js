@@ -52,7 +52,9 @@ class AddTaskScreen extends Component<Props> {
 
   onPressDeleteTask = () => {
     const task = this.props.navigation.getParam('task')
-    this.props.deleteTask(task)
+    if(task){
+      this.props.deleteTask(task)
+    }
     this.props.navigation.goBack()
   }
 
