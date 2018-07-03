@@ -1,24 +1,15 @@
-// a library to wrap and simplify api calls
-import {Platform} from 'react-native'
 import apisauce from 'apisauce'
 
 import AppConfig from '../Config/AppConfig'
 
-// our "constructor"
 const create = (baseURL = AppConfig.apiBaseUrl) => {
-  // ------
-  // STEP 1
-  // ------
-  //
-  // Create and configure an apisauce-based api object.
-  //
+
   const api = apisauce.create({
     // base URL is read from the "constructor"
     baseURL,
     // here are some default headers
     headers: {
       'Cache-Control': 'no-cache',
-      'X-App-Version': '1.0.0',
       'Content-Type': 'application/json; charset=utf-8',
       'Accept': 'application/json',
     },
@@ -26,13 +17,22 @@ const create = (baseURL = AppConfig.apiBaseUrl) => {
     timeout: 10000
   })
 
+  const getTasks = () => api.get('/device/tasks')
+  const addTask = (form) => api.post(`/device/tasks`, form)
+  const deleteTasks = () => api.delete(`/device/tasks`)
+  const updateTask = (form, taskId) => api.post(`/device/tasks/${taskId}`, form)
+  const deleteTask = (taskId) => api.delete(`/device/tasks/${taskId}`)
 
   return {
     setHeader: api.setHeader,
+    getTasks,
+    addTask,
+    updateTask,
+    deleteTask,
+    deleteTasks,
   }
 }
 
-// let's return back our create method as the default.
 export default {
   create
 }
