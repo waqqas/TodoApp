@@ -26,7 +26,6 @@ const updateTask = function* (api, {form, id}) {
 
 const getTasks = function* (api) {
   const response = yield call(api.getTasks)
-  console.log('response: ', response)
   if (response.ok) {
     yield put(TasksActions.getTasksSuccess(response.data))
   }
