@@ -1,11 +1,16 @@
-import {cancelled, put, takeLatest, all} from 'redux-saga/effects';
-import StartupActions, {StartupTypes} from '../Redux/StartupRedux';
+import {cancelled, put, takeLatest, all} from 'redux-saga/effects'
+import DeviceInfo from 'react-native-device-info'
+
+import StartupActions, {StartupTypes} from '../Redux/StartupRedux'
+import AppActions from '../Redux/AppRedux'
 
 const startup = function* (api) {
   yield put(StartupActions.startupSuccess());
 };
 
 const startupSuccess = function* (api) {
+  api.setHeader('authorization', `Bearer ${DeviceInfo.getUniqueID()}`)
+  yield put(AppActions.startApp())
 };
 
 export default () => {

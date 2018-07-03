@@ -1,13 +1,13 @@
 import {createActions, createReducer} from "reduxsauce";
 import Immutable from "seamless-immutable";
-import uuid from 'uuid/v4'
-import _ from 'lodash'
 
 /* ------------- Types and Action Creators ------------- */
 
 const {Types, Creators} = createActions({
   addTask: ['form'],
+  addTaskSuccess: ['task'],
   updateTask: ['form', 'id'],
+  updateTaskSuccess: ['task'],
 })
 
 export const TasksTypes = Types
@@ -21,17 +21,15 @@ export const INITIAL_STATE = Immutable({
 
 /* ------------- Reducers ------------- */
 
-export const addTask = (state, {form}) => {
-  const task = _.merge({id: uuid()}, form)
+export const addTaskSuccess = (state, {task}) => {
   return state.merge({list: state.list.concat(task)})
 
 }
 
-export const updateTask = (state, {form, id}) => {
+export const updateTaskSuccess = (state, {task}) => {
   return state.merge({
     list: state.list.map((oldTask) => {
-        if (oldTask.id === id) {
-          const task = _.merge({id}, form)
+        if (oldTask.id === task.id) {
           return task
         }
         return oldTask
@@ -43,8 +41,8 @@ export const updateTask = (state, {form, id}) => {
 /* ------------- Hookup Reducers To Types ------------- */
 
 export const reducer = createReducer(INITIAL_STATE, {
-  [Types.ADD_TASK]: addTask,
-  [Types.UPDATE_TASK]: updateTask,
+  [Types.ADD_TASK_SUCCESS]: addTaskSuccess,
+  [Types.UPDATE_TASK_SUCCESS]: updateTaskSuccess,
 })
 
 /* ------------- Selector ------------- */
