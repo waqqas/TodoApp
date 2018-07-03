@@ -81,7 +81,7 @@ margin-vertical: 10px;
 
 const ButtonText = styled.Text`
 font-size: 18px;
-color: ${props => props.color || '#FFFFFF'};
+color: ${props => props.color || Colors.white};
 text-align: center;
 `
 
@@ -99,4 +99,9 @@ const AppButton = ({spinner, disabled, children, textProps, onPress, ...props}) 
 export const FullButton = styled(AppButton)`
 padding-vertical: 12px;
 background: ${props => props.backgroundColor || Colors.default}${props => props.disabled ? '3E' : 'FF'};
+`
+
+export const TabLabel = styled.Text`
+font-size: 13px;
+margin-vertical: 10px;
 `

@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 import {StackActions, NavigationActions} from 'react-navigation';
 
 import {getStartupStatus} from '../Redux/StartupRedux';
-import {Screen, AppStatusBar} from '../Themes/ApplicationStyles'
+import {Screen} from '../Themes/ApplicationStyles'
 
 
 class SplashScreen extends Component {
@@ -33,7 +33,6 @@ class SplashScreen extends Component {
   render() {
     return (
       <Screen>
-        <AppStatusBar hidden/>
         <Text>Splash</Text>
       </Screen>
     );

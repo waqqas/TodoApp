@@ -9,6 +9,7 @@ import StartupActions from '../Redux/StartupRedux';
 import ReduxPersist from '../Config/ReduxPersist';
 import AppActions, {isNetDisconnected} from '../Redux/AppRedux'
 import {Colors} from '../Themes'
+import {AppStatusBar} from '../Themes/ApplicationStyles'
 
 import type {ConnectionInfo} from '../Models'
 
@@ -39,7 +40,8 @@ class RootContainer extends Component<Props> {
 
   render() {
     return (
-      <View>
+      <View style={{flex: 1}}>
+        <AppStatusBar/>
         <StatusBarAlert
           visible={this.props.isNetDisconnected}
           message='No connection'
