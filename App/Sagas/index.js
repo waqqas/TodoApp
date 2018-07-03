@@ -1,6 +1,7 @@
 import {take, fork, cancel, all} from 'redux-saga/effects';
 import getStartupSaga from './StartupSagas';
 import getAppSaga from './AppSagas';
+import getTasksSaga from './TasksSagas';
 
 import {AppTypes} from '../Redux/AppRedux'
 
@@ -18,7 +19,9 @@ const root = function* root() {
 
   while (yield take(AppTypes.START_APP)) {
 
-    const tasks = yield all([])
+    const tasks = yield all([
+      fork(getTasksSaga().watcher, api),
+    ])
 
     yield take(AppTypes.STOP_APP)
 
