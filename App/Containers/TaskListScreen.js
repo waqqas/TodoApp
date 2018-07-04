@@ -10,9 +10,10 @@ import type {Task} from "../Models";
 import TaskRow from '../Components/TaskRow'
 
 type Props = {
-  tasks: Task[],
-  navigation: NavigationScreenProp<NavigationState>,
-  getTasks: (void) => void
+  tasks: Task[];
+  navigation: NavigationScreenProp<NavigationState>;
+  getTasks: (void) => void;
+  deleteTask: (Task) => void;
 }
 
 class TaskListScreen extends Component<Props> {
@@ -42,11 +43,16 @@ class TaskListScreen extends Component<Props> {
     this.props.navigation.navigate('AddTaskScreen', {task})
   }
 
+  onPressDelete(task: Task) {
+    this.props.deleteTask(task)
+  }
+
   renderTask = (item) => {
     const task: Task = item.item
 
     return (
-      <TaskRow task={task} onPressRow={this.onPressRow.bind(this, task)}/>
+      <TaskRow task={task} onPressRow={this.onPressRow.bind(this, task)}
+               onPressDelete={this.onPressDelete.bind(this, task)}/>
     )
   }
 
@@ -78,7 +84,8 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  getTasks: () => dispatch(TasksActions.getTasks())
+  getTasks: () => dispatch(TasksActions.getTasks()),
+  deleteTask: (task) => dispatch(TasksActions.deleteTask(task)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(TaskListScreen);
