@@ -24,9 +24,13 @@ const TaskNav = createStackNavigator({
 const MainNav = createBottomTabNavigator({
     TaskNav: {
       screen: TaskNav,
-      navigationOptions: {
-        tabBarLabel: 'Tasks'
+      navigationOptions: ({navigation}) => {
+        return {
+          tabBarLabel: 'Tasks',
+          tabBarVisible: navigation.state.index === 0,
+        }
       }
+
     },
     SettingNav: {
       screen: SettingNav,
@@ -53,7 +57,9 @@ const MainNav = createBottomTabNavigator({
 
 const AppNav = createStackNavigator({
   SplashScreen: {screen: SplashScreen},
-  MainNav: {screen: MainNav},
+  MainNav: {
+    screen: MainNav,
+  },
 }, {
   initialRouteName: 'SplashScreen',
   headerMode: 'none'
