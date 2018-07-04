@@ -11,6 +11,7 @@ const {Types, Creators} = createActions({
   getTasks: null,
   getTasksSuccess: ['list'],
   deleteTask: ['task'],
+  doDeleteTask: ['task'],
   deleteTaskSuccess: ['task'],
 })
 
