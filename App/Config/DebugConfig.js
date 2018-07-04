@@ -1,3 +1,6 @@
 export default {
-  yellowBox: true
+  yellowBox: true,
+  ignoredYellowBox: [
+    'Warning: isMounted',
+  ]
 }
