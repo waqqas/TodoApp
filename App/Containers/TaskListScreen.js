@@ -8,12 +8,14 @@ import {Screen, IconButton, Content} from '../Themes/ApplicationStyles'
 import TasksActions, {getTaskList} from "../Redux/TasksRedux";
 import type {Task} from "../Models";
 import TaskRow from '../Components/TaskRow'
+import {getTasksFetching} from '../Redux/AppRedux'
 
 type Props = {
   tasks: Task[];
   navigation: NavigationScreenProp<NavigationState>;
   getTasks: (void) => void;
   deleteTask: (Task) => void;
+  fetchingTasks: boolean;
 }
 
 class TaskListScreen extends Component<Props> {
@@ -32,6 +34,11 @@ class TaskListScreen extends Component<Props> {
 
   componentDidMount() {
     this.props.navigation.setParams({onPressAddTask: this.onPressAddTask})
+    this.onRefresh()
+
+  }
+
+  onRefresh = () => {
     this.props.getTasks()
   }
 
@@ -65,9 +72,11 @@ class TaskListScreen extends Component<Props> {
   render() {
     return (
       <Screen>
-        <Content padding={20}>
+        <Content padding={20} fixed>
           <FlatList
             data={this.props.tasks}
+            refreshing={this.props.fetchingTasks}
+            onRefresh={this.onRefresh}
             renderItem={this.renderTask}
             ListEmptyComponent={this.renderEmptyPlaceHolder()}
             keyExtractor={task => task._id}/>
@@ -79,7 +88,8 @@ class TaskListScreen extends Component<Props> {
 
 const mapStateToProps = (state) => {
   return {
-    tasks: getTaskList(state)
+    tasks: getTaskList(state),
+    fetchingTasks: getTasksFetching(state),
   };
 };
 

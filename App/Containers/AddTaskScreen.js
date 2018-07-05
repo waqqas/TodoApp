@@ -4,6 +4,7 @@ import {Text, View} from 'react-native';
 import {connect} from 'react-redux';
 import {isInvalid, isSubmitting, getFormValues} from 'redux-form'
 import type {NavigationScreenProp, NavigationState} from 'react-navigation'
+import update from 'immutability-helper'
 
 
 import {Screen, IconButton, Content, FullButton} from '../Themes/ApplicationStyles'
@@ -14,7 +15,7 @@ import {Colors} from '../Themes'
 
 type Props = {
   addTask: (AddTaskFormValues) => void,
-  updateTask: (AddTaskFormValues, string) => void,
+  updateTask: (Task) => void,
   deleteTask: (Task) => void,
   navigation: NavigationScreenProp<NavigationState>,
   invalid: boolean;
@@ -53,7 +54,7 @@ class AddTaskScreen extends Component<Props> {
 
   onPressDeleteTask = () => {
     const task = this.props.navigation.getParam('task')
-    if(task){
+    if (task) {
       this.props.deleteTask(task)
     }
     this.props.navigation.goBack()
@@ -63,7 +64,7 @@ class AddTaskScreen extends Component<Props> {
     const task = this.props.navigation.getParam('task')
 
     if (task) {
-      this.props.updateTask(this.props.values, task.id)
+      this.props.updateTask(update(task, {$merge: this.props.values}))
     }
     else {
       this.props.addTask(this.props.values)
@@ -93,9 +94,9 @@ const mapStateToProps = (state) => {
   };
 };
 const mapDispatchToProps = (dispatch) => ({
-  addTask: (form) => dispatch(TasksActions.addTask(form)),
-  updateTask: (form, id) => dispatch(TasksActions.updateTask(form, id)),
-  deleteTask: (task) => dispatch(TasksActions.deleteTask(task)),
+  addTask: (form: AddTaskFormValues) => dispatch(TasksActions.addTask(form)),
+  updateTask: (task: Task) => dispatch(TasksActions.updateTask(task)),
+  deleteTask: (task: Task) => dispatch(TasksActions.deleteTask(task)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddTaskScreen);

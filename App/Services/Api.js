@@ -19,8 +19,7 @@ const create = (baseURL = AppConfig.apiBaseUrl) => {
 
   const getTasks = () => api.get('/device/tasks')
   const addTask = (form) => api.post(`/device/tasks`, form)
-  const deleteTasks = () => api.delete(`/device/tasks`)
-  const updateTask = (form, taskId) => api.put(`/device/tasks/${taskId}`, form)
+  const updateTask = (task) => api.put(`/device/tasks/${task.id}`, task)
   const deleteTask = (taskId) => api.delete(`/device/tasks/${taskId}`)
 
   return {
@@ -29,7 +28,6 @@ const create = (baseURL = AppConfig.apiBaseUrl) => {
     addTask,
     updateTask,
     deleteTask,
-    deleteTasks,
   }
 }
 

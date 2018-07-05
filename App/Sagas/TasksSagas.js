@@ -1,7 +1,8 @@
-import {cancelled, all, takeLatest, call, put, takeEvery} from 'redux-saga/effects';
-import TasksActions, {TasksTypes} from "../Redux/TasksRedux";
-import {Alert} from 'react-native'
+import {cancelled, all, takeLatest, call, put, takeEvery, select} from 'redux-saga/effects';
+import TasksActions, {getAllTaskList, TasksTypes} from "../Redux/TasksRedux";
+import {Alert, NetInfo} from 'react-native'
 import {channel} from 'redux-saga'
+import _ from "lodash";
 
 
 const passThroughChannel = channel();
@@ -11,25 +12,17 @@ const passThroughChannelWatcher = function* (action) {
 }
 
 
-const addTask = function* (api, {form}) {
-  const response = yield call(api.addTask, form)
-  if (response.ok) {
-    yield put(TasksActions.addTaskSuccess(response.data))
-  }
-  else if (response.problem === 'TIMEOUT_ERROR') {
-  }
-  else {
+const addTask = function* (api) {
+  const connected = yield call(NetInfo.isConnected.fetch)
+  if (connected) {
+    yield put(TasksActions.syncTasks())
   }
 }
 
-const updateTask = function* (api, {form, id}) {
-  const response = yield call(api.updateTask, form, id)
-  if (response.ok) {
-    yield put(TasksActions.updateTaskSuccess(response.data))
-  }
-  else if (response.problem === 'TIMEOUT_ERROR') {
-  }
-  else {
+const updateTask = function* (api) {
+  const connected = yield call(NetInfo.isConnected.fetch)
+  if (connected) {
+    yield put(TasksActions.syncTasks())
   }
 }
 
@@ -38,44 +31,72 @@ const getTasks = function* (api) {
   if (response.ok) {
     yield put(TasksActions.getTasksSuccess(response.data))
   }
-  else if (response.problem === 'TIMEOUT_ERROR') {
-  }
-  else {
+}
+
+const deleteTask = function* (api) {
+  const connected = yield call(NetInfo.isConnected.fetch)
+  if (connected) {
+    yield put(TasksActions.syncTasks())
   }
 }
 
-const doDeleteTask = function* (api, {task}) {
-  const response = yield call(api.deleteTask, task.id)
+// const deleteTask = function* (api, {task}) {
+//   Alert.alert(
+//     'Confirmation',
+//     'Are you sure?',
+//     [
+//       {
+//         text: 'No',
+//         style: 'cancel'
+//       },
+//       {
+//         text: 'Yes',
+//         onPress: () => {
+//           passThroughChannel.put(TasksActions.doDeleteTask(task))
+//         }
+//       },
+//     ],
+//     {cancelable: false}
+//   )
+// }
+
+const syncTasks = function* (api) {
+  const tasks = yield select(state => getAllTaskList(state))
+
+  tasks.forEach(task => {
+    if (task._synced === false) {
+      passThroughChannel.put(TasksActions.syncTask(task))
+    }
+  })
+}
+
+const syncTask = function* (api, {task}) {
+  let response = null
+
+  console.log('sync: task: ', task)
+  // don't send local props to server
+  const data = _.omit(task, ['_id', '_synced', '_deleted'])
+
+  if (task.id) {
+    if(task._deleted === true){
+      response = yield call(api.deleteTask, task.id)
+    }
+    else{
+      //update task
+      response = yield call(api.updateTask, data)
+    }
+  }
+  else {
+    // add task
+    response = yield call(api.addTask, data)
+  }
+
   if (response.ok) {
-    yield put(TasksActions.deleteTaskSuccess(response.data))
+    // set synced === true
+    // merge 'id' coming from server
+    yield put(TasksActions.syncTaskSuccess(_.merge(response.data, task)))
   }
-  else if (response.problem === 'TIMEOUT_ERROR') {
-  }
-  else {
-  }
-
 }
-
-const deleteTask = function* (api, {task}) {
-  Alert.alert(
-    'Confirmation',
-    'Are you sure?',
-    [
-      {
-        text: 'No',
-        style: 'cancel'
-      },
-      {
-        text: 'Yes',
-        onPress: () => {
-          passThroughChannel.put(TasksActions.doDeleteTask(task))
-        }
-      },
-    ],
-    {cancelable: false}
-  )
-}
-
 
 export default () => {
   function* watcher(api) {
@@ -86,7 +107,8 @@ export default () => {
         takeLatest(TasksTypes.UPDATE_TASK, updateTask, api),
         takeLatest(TasksTypes.GET_TASKS, getTasks, api),
         takeLatest(TasksTypes.DELETE_TASK, deleteTask, api),
-        takeLatest(TasksTypes.DO_DELETE_TASK, doDeleteTask, api),
+        takeLatest(TasksTypes.SYNC_TASKS, syncTasks, api),
+        takeEvery(TasksTypes.SYNC_TASK, syncTask, api),
       ]);
 
     } finally {

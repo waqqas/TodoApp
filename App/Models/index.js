@@ -1,7 +1,10 @@
 // @flow
 
 export type Task = {
-  id: string;
+  _id: string;
+  _synced: boolean;
+  _deleted: boolean;
+  id?: string;
   title: string;
   done: boolean;
 }
@@ -16,3 +19,24 @@ export type ConnectionInfo = {
   effectiveType: string;
 }
 
+
+export type TasksState = {
+  list: Array<Task>;
+}
+
+export type AppState = {
+  connectionInfo: ConnectionInfo;
+  getTasks: {
+    fetching: boolean;
+  }
+}
+
+export type StartupState = {
+  success: boolean;
+}
+
+export type State = {
+  tasks: TasksState,
+  app: AppState,
+  startup: StartupState,
+}

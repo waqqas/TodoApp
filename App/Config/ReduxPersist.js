@@ -2,12 +2,13 @@ import immutablePersistenceTransform from '../Services/ImmutablePersistenceTrans
 import {AsyncStorage} from 'react-native'
 
 const REDUX_PERSIST = {
-  active: true,
+  active: false,
   reducerVersion: '1.0',
   storeConfig: {
     key: 'primary',
     storage: AsyncStorage,
-    whitelist: [],
+    whitelist: ['tasks'],
+    blacklist: ['app'],
     transforms: [immutablePersistenceTransform]
   }
 }
