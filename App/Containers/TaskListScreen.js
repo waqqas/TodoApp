@@ -70,7 +70,7 @@ class TaskListScreen extends Component<Props> {
             data={this.props.tasks}
             renderItem={this.renderTask}
             ListEmptyComponent={this.renderEmptyPlaceHolder()}
-            keyExtractor={item => item.id}/>
+            keyExtractor={task => task._id}/>
         </Content>
       </Screen>
     );

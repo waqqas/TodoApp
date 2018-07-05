@@ -1,5 +1,7 @@
 import {createActions, createReducer} from "reduxsauce";
 import Immutable from "seamless-immutable";
+import uuid from 'uuid/v4'
+import _ from 'lodash'
 
 /* ------------- Types and Action Creators ------------- */
 
@@ -51,7 +53,7 @@ export const deleteTaskSuccess = (state, {task}) => {
   })
 }
 
-export const getTasksSuccess = (state, {list}) => state.merge({list})
+export const getTasksSuccess = (state, {list}) => state.merge({list: list.map(task => _.merge({_id: uuid(), _synced: true}, task))})
 
 /* ------------- Hookup Reducers To Types ------------- */
 
