@@ -19,6 +19,7 @@ const {Types, Creators} = createActions({
   syncTask: ['task'],
   syncTaskSuccess: ['task'],
   deleteTaskSuccess: ['task'],
+  deleteAllTasks: null
 })
 
 export const TasksTypes = Types
@@ -96,6 +97,16 @@ export const getTasksSuccess = (state: Immutable, {list}: { list: Array<Task> })
     }
   })
 
+export const deleteAllTasks = (state: Immutable, {task}: { task: Task }) => {
+  return update(state, {
+    list: {
+      $apply: list => list.map((currentTask: Task) => {
+        return update(currentTask, {$merge: {_synced: false, _deleted: true}})
+      })
+    }
+  })
+}
+
 /* ------------- Hookup Reducers To Types ------------- */
 
 export const reducer = createReducer(INITIAL_STATE, {
@@ -105,6 +116,7 @@ export const reducer = createReducer(INITIAL_STATE, {
   [Types.GET_TASKS_SUCCESS]: getTasksSuccess,
   [Types.DELETE_TASK]: deleteTask,
   [Types.DELETE_TASK_SUCCESS]: deleteTaskSuccess,
+  [Types.DELETE_ALL_TASKS]: deleteAllTasks,
 })
 
 /* ------------- Selector ------------- */

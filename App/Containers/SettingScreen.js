@@ -1,7 +1,9 @@
 import React, {Component} from 'react';
 import {Text} from 'react-native';
 import {connect} from 'react-redux';
-import {Screen} from '../Themes/ApplicationStyles'
+import {Screen, FullButton} from '../Themes/ApplicationStyles'
+import {Colors} from "../Themes";
+import TasksActions from '../Redux/TasksRedux'
 
 class SettingScreen extends Component {
 
@@ -11,9 +13,14 @@ class SettingScreen extends Component {
     })
   }
 
+  onPressDeleteAllTask = () => {
+    this.props.deleteAllTasks()
+  }
+
   render() {
     return (
       <Screen>
+        <FullButton backgroundColor={Colors.error} onPress={this.onPressDeleteAllTask}>DELETE ALL</FullButton>
       </Screen>
     );
   }
@@ -22,5 +29,7 @@ class SettingScreen extends Component {
 const mapStateToProps = (state) => {
   return {};
 };
-const mapDispatchToProps = (dispatch) => ({});
+const mapDispatchToProps = (dispatch) => ({
+  deleteAllTasks: () => dispatch(TasksActions.deleteAllTasks())
+});
 export default connect(mapStateToProps, mapDispatchToProps)(SettingScreen);

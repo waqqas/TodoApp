@@ -40,6 +40,13 @@ const deleteTask = function* (api) {
   }
 }
 
+const deleteAllTasks = function* (api) {
+  const connected = yield call(NetInfo.isConnected.fetch)
+  if (connected) {
+    yield put(TasksActions.syncTasks())
+  }
+}
+
 const syncTasks = function* (api) {
   const tasks = yield select(state => getAllTaskList(state))
 
@@ -94,6 +101,7 @@ export default () => {
         takeLatest(TasksTypes.DELETE_TASK, deleteTask, api),
         takeLatest(TasksTypes.SYNC_TASKS, syncTasks, api),
         takeEvery(TasksTypes.SYNC_TASK, syncTask, api),
+        takeLatest(TasksTypes.DELETE_ALL_TASKS, deleteAllTasks, api),
       ]);
 
     } finally {
