@@ -19,7 +19,15 @@ type Props = {
   changeConnectionInfo: (ConnectionInfo) => void,
 }
 
-class RootContainer extends Component<Props> {
+type State = {
+  isNetDisconnected: boolean;
+}
+
+class RootContainer extends Component<Props, State> {
+
+  state: State = {
+    isNetDisconnected: false
+  }
 
   componentDidMount() {
     // if redux persist is not active fire startup action
@@ -38,15 +46,26 @@ class RootContainer extends Component<Props> {
     this.props.changeConnectionInfo(connectionInfo)
   }
 
+  hideAlert = () => {
+    this.setState({isNetDisconnected: false})
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({isNetDisconnected: nextProps.isNetDisconnected})
+
+  }
+
   render() {
     return (
       <View style={{flex: 1}}>
         <AppStatusBar/>
         <StatusBarAlert
-          visible={this.props.isNetDisconnected}
+          visible={this.state.isNetDisconnected}
           message='No connection'
           backgroundColor={Colors.error}
           color={Colors.white}
+          pulse={'background'}
+          onPress={this.hideAlert}
         />
         <AppNavigation/>
       </View>
