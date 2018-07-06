@@ -40,26 +40,6 @@ const deleteTask = function* (api) {
   }
 }
 
-// const deleteTask = function* (api, {task}) {
-//   Alert.alert(
-//     'Confirmation',
-//     'Are you sure?',
-//     [
-//       {
-//         text: 'No',
-//         style: 'cancel'
-//       },
-//       {
-//         text: 'Yes',
-//         onPress: () => {
-//           passThroughChannel.put(TasksActions.doDeleteTask(task))
-//         }
-//       },
-//     ],
-//     {cancelable: false}
-//   )
-// }
-
 const syncTasks = function* (api) {
   const tasks = yield select(state => getAllTaskList(state))
 
@@ -73,29 +53,34 @@ const syncTasks = function* (api) {
 const syncTask = function* (api, {task}) {
   let response = null
 
-  console.log('sync: task: ', task)
   // don't send local props to server
   const data = _.omit(task, ['_id', '_synced', '_deleted'])
 
-  if (task.id) {
-    if(task._deleted === true){
-      response = yield call(api.deleteTask, task.id)
+  if (task._deleted === true) {
+    response = yield call(api.deleteTask, task.id)
+    if (response.ok) {
+      yield put(TasksActions.deleteTaskSuccess(task))
     }
-    else{
+
+  }
+  else {
+    // 'id' parameter determines if client need to update or add
+    if (task.id) {
       //update task
       response = yield call(api.updateTask, data)
     }
-  }
-  else {
-    // add task
-    response = yield call(api.addTask, data)
+    else {
+      // add task
+      response = yield call(api.addTask, data)
+    }
+
+    if (response.ok) {
+      // set synced === true
+      // merge 'id' coming from server
+      yield put(TasksActions.syncTaskSuccess(_.merge(response.data, task)))
+    }
   }
 
-  if (response.ok) {
-    // set synced === true
-    // merge 'id' coming from server
-    yield put(TasksActions.syncTaskSuccess(_.merge(response.data, task)))
-  }
 }
 
 export default () => {

@@ -18,6 +18,7 @@ const {Types, Creators} = createActions({
   syncTasks: null,
   syncTask: ['task'],
   syncTaskSuccess: ['task'],
+  deleteTaskSuccess: ['task'],
 })
 
 export const TasksTypes = Types
@@ -42,11 +43,11 @@ export const addTask = (state: Immutable, {form}: { form: AddTaskFormValues }) =
 export const updateTask = (state: Immutable, {task}: { task: Task }) => {
   return update(state, {
     list: {
-      $apply: list => list.map((oldTask: Task) => {
-        if (oldTask._id === task._id) {
+      $apply: list => list.map((currentTask: Task) => {
+        if (currentTask._id === task._id) {
           return update(task, {$merge: {_synced: false}})
         }
-        return oldTask
+        return currentTask
       })
     }
   })
@@ -55,11 +56,11 @@ export const updateTask = (state: Immutable, {task}: { task: Task }) => {
 export const deleteTask = (state: Immutable, {task}: { task: Task }) => {
   return update(state, {
     list: {
-      $apply: list => list.map((oldTask: Task) => {
-        if (oldTask._id === task._id) {
+      $apply: list => list.map((currentTask: Task) => {
+        if (currentTask._id === task._id) {
           return update(task, {$merge: {_synced: false, _deleted: true}})
         }
-        return oldTask
+        return currentTask
       })
     }
   })
@@ -68,17 +69,22 @@ export const deleteTask = (state: Immutable, {task}: { task: Task }) => {
 export const syncTaskSuccess = (state: Immutable, {task}: { task: Task }) => {
   return update(state, {
     list: {
-      $apply: list => list.map((oldTask: Task) => {
-        if (oldTask._id === task._id) {
-          // do not return the old task if it was marked for deletion
-          if (oldTask._deleted !== true) {
-            return update(task, {$merge: {_synced: true}})
-          }
+      $apply: list => list.map((currentTask: Task) => {
+        if (currentTask._id === task._id) {
+          return update(task, {$merge: {_synced: true}})
         }
         else {
-          return oldTask
+          return currentTask
         }
       })
+    }
+  })
+}
+
+export const deleteTaskSuccess = (state: Immutable, {task}: { task: Task }) => {
+  return update(state, {
+    list: {
+      $apply: list => list.filter((currentTask: Task) => (currentTask._id !== task._id))
     }
   })
 }
@@ -98,6 +104,7 @@ export const reducer = createReducer(INITIAL_STATE, {
   [Types.SYNC_TASK_SUCCESS]: syncTaskSuccess,
   [Types.GET_TASKS_SUCCESS]: getTasksSuccess,
   [Types.DELETE_TASK]: deleteTask,
+  [Types.DELETE_TASK_SUCCESS]: deleteTaskSuccess,
 })
 
 /* ------------- Selector ------------- */
