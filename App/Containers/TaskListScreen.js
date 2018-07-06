@@ -13,7 +13,7 @@ import {getTasksFetching} from '../Redux/AppRedux'
 type Props = {
   tasks: Task[];
   navigation: NavigationScreenProp<NavigationState>;
-  getTasks: (void) => void;
+  syncTasks: (void) => void;
   deleteTask: (Task) => void;
   fetchingTasks: boolean;
 }
@@ -39,7 +39,7 @@ class TaskListScreen extends Component<Props> {
   }
 
   onRefresh = () => {
-    this.props.getTasks()
+    this.props.syncTasks()
   }
 
   onPressAddTask = () => {
@@ -94,7 +94,7 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  getTasks: () => dispatch(TasksActions.getTasks()),
+  syncTasks: () => dispatch(TasksActions.syncTasks()),
   deleteTask: (task) => dispatch(TasksActions.deleteTask(task)),
 });
 

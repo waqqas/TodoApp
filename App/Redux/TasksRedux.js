@@ -37,7 +37,6 @@ export const INITIAL_STATE = Immutable(state)
 
 export const addTask = (state: Immutable, {form}: { form: AddTaskFormValues }) => {
   const task: Task = update(form, {$merge: {_id: uuid(), _synced: false, _deleted: false}})
-
   return update(state, {list: {$push: [task]}})
 }
 
@@ -61,7 +60,9 @@ export const deleteTask = (state: Immutable, {task}: { task: Task }) => {
         if (currentTask._id === task._id) {
           return update(task, {$merge: {_synced: false, _deleted: true}})
         }
-        return currentTask
+        else {
+          return currentTask
+        }
       })
     }
   })
@@ -97,7 +98,7 @@ export const getTasksSuccess = (state: Immutable, {list}: { list: Array<Task> })
     }
   })
 
-export const deleteAllTasks = (state: Immutable, {task}: { task: Task }) => {
+export const deleteAllTasks = (state: Immutable) => {
   return update(state, {
     list: {
       $apply: list => list.map((currentTask: Task) => {
@@ -121,5 +122,5 @@ export const reducer = createReducer(INITIAL_STATE, {
 
 /* ------------- Selector ------------- */
 
-export const getTaskList = (state: State) => state.tasks.list.filter((task) => (task._deleted !== true))
+export const getTaskList = (state: State) => state.tasks.list.filter((task) => (task && task._deleted !== true))
 export const getAllTaskList = (state: State) => state.tasks.list

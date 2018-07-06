@@ -63,9 +63,15 @@ const syncTask = function* (api, {task}) {
   // don't send local props to server
   const data = _.omit(task, ['_id', '_synced', '_deleted'])
 
+  // only delete a task if it is already synced
   if (task._deleted === true) {
-    response = yield call(api.deleteTask, task.id)
-    if (response.ok) {
+    if (task.id) {
+      response = yield call(api.deleteTask, task.id)
+      if (response.ok) {
+        yield put(TasksActions.deleteTaskSuccess(task))
+      }
+    }
+    else {
       yield put(TasksActions.deleteTaskSuccess(task))
     }
 
